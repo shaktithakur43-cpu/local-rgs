@@ -1,10 +1,10 @@
 rgs = {
-    rg1 = {
-    name = "tinku"
+  rg1 = {
+    name     = "tinku"
     location = "eastus"
-}
-rg2 = {
-    name = "pinku"
+  }
+  rg2 = {
+    name     = "pinku"
     location = "westus"
-}
+  }
 }
