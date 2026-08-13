@@ -4,7 +4,7 @@ rgs = {
     location = "eastus"
 }
 rg2 = {
-    name = "rinku"
+    name = "pinku"
     location = "westus"
 }
 }
