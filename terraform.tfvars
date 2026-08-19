@@ -1,6 +1,5 @@
 
-  rg2 = {
-    name     = "pinku"
-    location = "westus"
-}
+rg2 = {
+  name     = "pinku"
+  location = "westus"
 }
