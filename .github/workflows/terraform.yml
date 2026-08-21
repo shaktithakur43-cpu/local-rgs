@@ -31,8 +31,8 @@ jobs:
 
       # 2. TruffleHog (Secrets Scan)
       - name: Run TruffleHog
-        uses: trufflesecurity/trufflehog-actions-scan@v3.82.6
-
+        uses: trufflesecurity/trufflehog@main
+        
       # 3. tfsec (Security Scan)
       - name: Run tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
