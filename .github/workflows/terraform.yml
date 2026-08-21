@@ -4,6 +4,7 @@ on:
   push: 
     branches: 
       - main 
+      - feature-*
   pull_request:
     branches:
       - main
@@ -15,19 +16,25 @@ permissions:
   pull-requests: write
 
 jobs: 
-  TruffleHog: 
+  security-tools: 
     runs-on: ubuntu-latest 
     defaults: 
       run: 
         shell: bash 
 
     steps: 
+      # 1. Checkout code
       - name: Checkout code 
         uses: actions/checkout@v4 
         with: 
           fetch-depth: 0
-          # 3. tfsec Step
-      - name: Run tfsec (Security Scan)
+
+      # 2. TruffleHog (Secrets Scan)
+      - name: Run TruffleHog
+        uses: trufflesecurity/trufflehog-actions-scan@v3.82.6
+
+      # 3. tfsec (Security Scan)
+      - name: Run tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: .
@@ -39,7 +46,7 @@ jobs:
       - name: Terraform Init
         run: terraform init -backend=false
 
-      # 5. TFLint Step
+      # 5. TFLint
       - name: Setup TFLint
         uses: terraform-linters/setup-tflint@v4
         with:
