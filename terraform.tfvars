@@ -10,7 +10,7 @@ rgs = {
     location = "westus"
   }
 
-  rg3 = {
+  rg3 = { 
     name     = "rinku"
     location = "westus"
   }
