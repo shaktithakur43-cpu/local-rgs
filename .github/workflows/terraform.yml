@@ -1,53 +1,50 @@
 name: "Terraform Security Pipeline"
 
-on: 
-  push: 
-    branches: 
-      - main 
+on:
+  push:
+    branches:
+      - main
       - feature-*
       - cd-pipeline
+
   pull_request:
     branches:
       - main
 
-permissions: 
-  contents: read 
-  id-token: write 
-  issues: write 
+permissions:
+  contents: read
+  id-token: write
+  issues: write
   pull-requests: write
 
-jobs: 
-  security-tools: 
-    runs-on: ubuntu-latest 
-    defaults: 
-      run: 
-        shell: bash 
+jobs:
+  security-tools:
+    runs-on: ubuntu-latest
 
-    steps: 
-      # 1. Checkout code
-      - name: Checkout code 
-        uses: actions/checkout@v4 
-        with: 
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
           fetch-depth: 0
 
-      # 2. TruffleHog (Secrets Scan)
       - name: Run TruffleHog
         uses: trufflesecurity/trufflehog@main
-        
-      # 3. tfsec (Security Scan)
+
       - name: Run tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: .
 
-      # 4. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform init -backend=false
 
-      # 5. TFLint
       - name: Setup TFLint
         uses: terraform-linters/setup-tflint@v4
         with:
@@ -57,10 +54,16 @@ jobs:
         run: |
           tflint --init
           tflint -f compact
-          
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Terraform Plan
         run: terraform plan
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-   
